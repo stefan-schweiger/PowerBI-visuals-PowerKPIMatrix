@@ -423,6 +423,11 @@ export class PowerKPIMatrix implements powerbi.extensibility.visual.IVisual {
             properties.secondComparisonValueLineStyle = settings.secondComparisonValueLineStyle;
         }
 
+        if (this.renderOptions.data.columns[comparisonValueColumn.name]
+            || this.renderOptions.data.columns[secondComparisonValueColumn.name]) {
+            properties.isComparisonWithoutActualVisible = settings.isComparisonWithoutActualVisible;
+        }
+
         properties.backgroundColor = settings.backgroundColor;
 
         properties.shouldUseCommonScale = settings.shouldUseCommonScale;

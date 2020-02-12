@@ -44,6 +44,8 @@ export class SparklineSettings
     public actualThickness: number = 2;
     public actualLineStyle: LineStyle = LineStyle.solidLine;
 
+    public isComparisonWithoutActualVisible: boolean = false;
+
     public isTargetVisible: boolean = false;
     public targetColor: string = "#000000";
     public targetThickness: number = 1;

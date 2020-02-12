@@ -560,13 +560,21 @@ export abstract class DataConverter implements IConverter<IDataRepresentation> {
             ? NumericValueUtils.isValueValid(currentValue)
             : NumericValueUtils.isValueFinite(currentValue);
 
-        if (axisValue !== undefined && axisValue !== null && isCurrentValueValid) {
-            this.applyXArguments(series, axisValue, dataRepresentation.type);
+        const isComparisonValueValid: boolean = settings.comparisonValue.shouldTreatZeroValuesAsNulls
+            ? NumericValueUtils.isValueValid(comparisonValue)
+            : NumericValueUtils.isValueFinite(comparisonValue);
 
-            series.axisValue = axisValue;
+        const showComparisonsWithoutActual: boolean = settings.sparklineSettings.isComparisonWithoutActualVisible;
+
+        if (axisValue !== undefined && axisValue !== null
+            && (isCurrentValueValid || (showComparisonsWithoutActual && isComparisonValueValid))) {
+            this.applyXArguments(series, axisValue, dataRepresentation.type);
             series.axisValues.push(axisValue);
 
-            series.currentValue = currentValue;
+            if (isCurrentValueValid) {
+                series.axisValue = axisValue;
+                series.currentValue = currentValue;
+            }
 
             series.points[0] = this.updatePointSet(
                 series.points[0],
@@ -619,7 +627,7 @@ export abstract class DataConverter implements IConverter<IDataRepresentation> {
                 );
             }
 
-            if (settings.sparklineSettings.isActualVisible) {
+            if (settings.sparklineSettings.isActualVisible && isCurrentValueValid) {
                 DataConverter.applyYArguments(series.y, series.currentValue);
             }
 
@@ -631,57 +639,59 @@ export abstract class DataConverter implements IConverter<IDataRepresentation> {
                 DataConverter.applyYArguments(series.y, series.secondComparisonValue);
             }
 
-            // KPI Indicator
-            series.kpiIndicatorIndex = NumericValueUtils.isValueFinite(kpiIndicatorIndex)
-                ? kpiIndicatorIndex
-                : NaN;
+            if (isCurrentValueValid) {
+                // KPI Indicator
+                series.kpiIndicatorIndex = NumericValueUtils.isValueFinite(kpiIndicatorIndex)
+                    ? kpiIndicatorIndex
+                    : NaN;
 
-            if (isKPIIndicatorIndexSpecified) {
-                series.points[0].kpiIndicatorIndexes.push(kpiIndicatorIndex);
+                if (isKPIIndicatorIndexSpecified) {
+                    series.points[0].kpiIndicatorIndexes.push(kpiIndicatorIndex);
 
-                if (series.settings.sparklineSettings.isActualVisible
-                    && series.settings.sparklineSettings.shouldActualUseKPIColors
-                    && series.points[0]
-                ) {
-                    const currentKPI: IKPIIndicatorSettings = settings
-                        .kpiIndicator
-                        .getCurrentKPI(kpiIndicatorIndex);
+                    if (series.settings.sparklineSettings.isActualVisible
+                        && series.settings.sparklineSettings.shouldActualUseKPIColors
+                        && series.points[0]
+                    ) {
+                        const currentKPI: IKPIIndicatorSettings = settings
+                            .kpiIndicator
+                            .getCurrentKPI(kpiIndicatorIndex);
 
-                    const color: string = currentKPI && currentKPI.color
-                        || series.points[0].color;
+                        const color: string = currentKPI && currentKPI.color
+                            || series.points[0].color;
 
-                    series.points[0].colors.push(color);
+                        series.points[0].colors.push(color);
+                    }
                 }
+
+                series.kpiIndicatorValue = this.getVariance(
+                    isKPIIndicatorValueSpecified,
+                    kpiIndicatorValue,
+                    series.currentValue,
+                    series.comparisonValue,
+                );
+
+                // Second KPI Indicator
+                series.secondKPIIndicatorIndex = NumericValueUtils.isValueFinite(secondKPIIndicatorIndex)
+                    ? secondKPIIndicatorIndex
+                    : NaN;
+
+                series.secondKPIIndicatorValue = this.getVariance(
+                    isSecondKPIIndicatorValueSpecified,
+                    secondKPIIndicatorValue,
+                    series.currentValue,
+                    series.secondComparisonValue,
+                );
+
+                series.varianceSet[0] = this.updateVariance(
+                    series.varianceSet[0],
+                    series.kpiIndicatorValue,
+                );
+
+                series.varianceSet[1] = this.updateVariance(
+                    series.varianceSet[1],
+                    series.secondKPIIndicatorValue,
+                );
             }
-
-            series.kpiIndicatorValue = this.getVariance(
-                isKPIIndicatorValueSpecified,
-                kpiIndicatorValue,
-                series.currentValue,
-                series.comparisonValue,
-            );
-
-            // Second KPI Indicator
-            series.secondKPIIndicatorIndex = NumericValueUtils.isValueFinite(secondKPIIndicatorIndex)
-                ? secondKPIIndicatorIndex
-                : NaN;
-
-            series.secondKPIIndicatorValue = this.getVariance(
-                isSecondKPIIndicatorValueSpecified,
-                secondKPIIndicatorValue,
-                series.currentValue,
-                series.secondComparisonValue,
-            );
-
-            series.varianceSet[0] = this.updateVariance(
-                series.varianceSet[0],
-                series.kpiIndicatorValue,
-            );
-
-            series.varianceSet[1] = this.updateVariance(
-                series.varianceSet[1],
-                series.secondKPIIndicatorValue,
-            );
         }
 
         settings.currentValue.setColumnFormat(currentFormat);

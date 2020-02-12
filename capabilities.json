@@ -2516,6 +2516,12 @@
           },
           "displayName": "    Current Line Style"
         },
+        "isComparisonWithoutActualVisible": {
+          "type": {
+            "bool": true
+          },
+          "displayName": "  Show Future Comparison"
+        },
         "isTargetVisible": {
           "type": {
             "bool": true
