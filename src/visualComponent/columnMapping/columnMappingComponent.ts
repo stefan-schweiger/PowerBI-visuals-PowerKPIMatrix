@@ -35,6 +35,7 @@ import { kpiIndicatorValueColumn } from "../../columns/kpiIndicatorValueColumn";
 import { secondComparisonValueColumn } from "../../columns/secondComparisonValueColumn";
 import { secondKPIIndicatorIndexColumn } from "../../columns/secondKPIIndicatorIndexColumn";
 import { secondKPIIndicatorValueColumn } from "../../columns/secondKPIIndicatorValueColumn";
+import { valueFormatColumn } from "../../columns/valueFormatColumn";
 
 import { StateService } from "../../services/state/stateService";
 
@@ -123,6 +124,7 @@ export class ColumnMappingComponent extends BaseContainerComponent {
                 secondComparisonValueColumn,
                 secondKPIIndicatorIndexColumn,
                 secondKPIIndicatorValueColumn,
+                valueFormatColumn,
             ],
             element: this.scrollableElement,
             getSelectedValueByColumnName: (columnName: string) => {

@@ -122,6 +122,8 @@ export interface ICurrentSeriesData {
     secondKPIIndicatorValue: number;
     secondKPIIndicatorValueFormat: string;
     isSecondKPIIndicatorValueSpecified: boolean;
+
+    valueFormat: string;
 }
 
 export interface IConverterStepOptions {
@@ -554,6 +556,7 @@ export abstract class DataConverter implements IConverter<IDataRepresentation> {
             isSecondKPIIndicatorIndexSpecified,
             secondKPIIndicatorValue,
             secondKPIIndicatorValueFormat,
+            valueFormat,
         } = data;
 
         const isCurrentValueValid: boolean = settings.currentValue.shouldTreatZeroValuesAsNulls
@@ -694,10 +697,10 @@ export abstract class DataConverter implements IConverter<IDataRepresentation> {
             }
         }
 
-        settings.currentValue.setColumnFormat(currentFormat);
-        settings.comparisonValue.setColumnFormat(comparisonFormat);
+        settings.currentValue.setColumnFormat(valueFormat || currentFormat);
+        settings.comparisonValue.setColumnFormat(valueFormat || comparisonFormat);
         settings.kpiIndicatorValue.setColumnFormat(kpiIndicatorValueFormat);
-        settings.secondComparisonValue.setColumnFormat(secondComparisonValueFormat);
+        settings.secondComparisonValue.setColumnFormat(valueFormat || secondComparisonValueFormat);
         settings.secondKPIIndicatorValue.setColumnFormat(secondKPIIndicatorValueFormat);
     }
 

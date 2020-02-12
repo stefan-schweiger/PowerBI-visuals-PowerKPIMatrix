@@ -12,6 +12,11 @@
     "displayName": "Comparison Value",
     "kind": "Measure"
   }, {
+    "name": "valueFormat",
+    "displayName": "Value Format",
+    "kind": "Grouping",
+    "description": "Drop a column with desired value format here"
+  }, {
     "name": "kpiIndicatorIndex",
     "displayName": "KPI Indicator Index",
     "kind": "Measure"
@@ -3993,6 +3998,9 @@
       "targetValue": {
         "max": 0
       },
+      "valueFormat": {
+        "max": 0
+      },
       "kpiIndicatorIndex": {
         "max": 0
       },
@@ -4034,6 +4042,9 @@
       "targetValue": {
         "min": 0
       },
+      "valueFormat": {
+        "min": 0
+      },
       "kpiIndicatorIndex": {
         "min": 0
       },
@@ -4079,6 +4090,9 @@
       "targetValue": {
         "max": 1
       },
+      "valueFormat": {
+        "max": 1
+      },
       "kpiIndicatorIndex": {
         "max": 1
       },
@@ -4122,6 +4136,9 @@
         "max": 1
       },
       "targetValue": {
+        "max": 1
+      },
+      "valueFormat": {
         "max": 1
       },
       "kpiIndicatorIndex": {
@@ -4173,6 +4190,10 @@
         }, {
           "for": {
             "in": "targetValue"
+          }
+        }, {
+          "for": {
+            "in": "valueFormat"
           }
         }, {
           "for": {

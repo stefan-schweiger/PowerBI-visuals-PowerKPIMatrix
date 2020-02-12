@@ -40,6 +40,7 @@ import { kpiIndicatorValueColumn } from "../../../columns/kpiIndicatorValueColum
 import { secondComparisonValueColumn } from "../../../columns/secondComparisonValueColumn";
 import { secondKPIIndicatorIndexColumn } from "../../../columns/secondKPIIndicatorIndexColumn";
 import { secondKPIIndicatorValueColumn } from "../../../columns/secondKPIIndicatorValueColumn";
+import { valueFormatColumn } from "../../../columns/valueFormatColumn";
 
 import { NumericValueUtils } from "../../../utils/numericValueUtils";
 
@@ -128,6 +129,8 @@ export class ColumnBasedModelConverter extends DataConverter {
 
                         const columnValue: IColumnValue = columnValues[actualValueColumn.name][columnName];
 
+                        let valueFormat: string;
+
                         const currentValue: number = columnValue && columnValue.value;
                         const currentFormat: string = columnValue && columnValue.format;
                         const currentValueColumnName: string = columnName;
@@ -165,6 +168,12 @@ export class ColumnBasedModelConverter extends DataConverter {
                                 const format: string = currentColumnValue && currentColumnValue.format;
 
                                 switch (roleName) {
+                                    case valueFormatColumn.name: {
+                                        valueFormat = value;
+
+                                        break;
+                                    }
+
                                     case comparisonValueColumn.name: {
                                         comparisonValue = value;
                                         comparisonFormat = format;
@@ -242,6 +251,7 @@ export class ColumnBasedModelConverter extends DataConverter {
                             secondKPIIndicatorValue,
                             secondKPIIndicatorValueFormat,
                             series,
+                            valueFormat,
                         });
                     }
                 });

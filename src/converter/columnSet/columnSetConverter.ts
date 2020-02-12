@@ -34,6 +34,7 @@ import { rowBasedMetricNameColumn } from "../../columns/rowBasedMetricNameColumn
 import { secondComparisonValueColumn } from "../../columns/secondComparisonValueColumn";
 import { secondKPIIndicatorIndexColumn } from "../../columns/secondKPIIndicatorIndexColumn";
 import { secondKPIIndicatorValueColumn } from "../../columns/secondKPIIndicatorValueColumn";
+import { valueFormatColumn } from "../../columns/valueFormatColumn";
 import { IVisualDataColumn } from "../../columns/visualDataColumn";
 
 import { IConverter } from "../converter";
@@ -81,6 +82,7 @@ export class ColumnSetConverter implements IConverter<IDataRepresentationColumnS
             secondKPIIndicatorIndexColumn,
             secondKPIIndicatorValueColumn,
             rowBasedMetricNameColumn,
+            valueFormatColumn,
         ].forEach((column: IVisualDataColumn) => {
             dataMapping[column.name] = [];
         });

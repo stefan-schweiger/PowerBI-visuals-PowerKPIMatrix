@@ -35,6 +35,7 @@ import { rowBasedMetricNameColumn } from "../../../columns/rowBasedMetricNameCol
 import { secondComparisonValueColumn } from "../../../columns/secondComparisonValueColumn";
 import { secondKPIIndicatorIndexColumn } from "../../../columns/secondKPIIndicatorIndexColumn";
 import { secondKPIIndicatorValueColumn } from "../../../columns/secondKPIIndicatorValueColumn";
+import { valueFormatColumn } from "../../../columns/valueFormatColumn";
 
 import { DataRepresentationAxisValueType } from "../dataRepresentation/dataRepresentationAxisValueType";
 import { IDataRepresentationSeries } from "../dataRepresentation/dataRepresentationSeries";
@@ -129,6 +130,8 @@ export class RowBasedModelConverter extends DataConverter {
                 let currentValue: number;
                 let currentFormat: string;
 
+                let valueFormat: string;
+
                 let comparisonValue: number = NaN;
                 let comparisonFormat: string;
                 let isComparisonValueSpecified: boolean = false;
@@ -162,6 +165,11 @@ export class RowBasedModelConverter extends DataConverter {
                         const format: string = columnValue && columnValue.format;
 
                         switch (columnName) {
+                            case valueFormatColumn.name: {
+                                valueFormat = value;
+
+                                break;
+                            }
                             case actualValueColumn.name: {
                                 currentValue = value;
                                 currentFormat = format;
@@ -245,6 +253,7 @@ export class RowBasedModelConverter extends DataConverter {
                     secondKPIIndicatorValue,
                     secondKPIIndicatorValueFormat,
                     series,
+                    valueFormat,
                 });
             }
         }
