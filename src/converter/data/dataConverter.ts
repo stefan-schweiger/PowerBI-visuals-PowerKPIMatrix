@@ -574,18 +574,21 @@ export abstract class DataConverter implements IConverter<IDataRepresentation> {
             this.applyXArguments(series, axisValue, dataRepresentation.type);
             series.axisValues.push(axisValue);
 
+            const seriesComparisonValue = NumericValueUtils.isValueValid(comparisonValue)
+                ? comparisonValue
+                : NaN;
+
+            const seriesSecondComparisonValue = NumericValueUtils.isValueValid(secondComparisonValue)
+                ? secondComparisonValue
+                : NaN;
+
             // only set Values if current value is valid, this way only the values of the current "AsOfDate" are shown
             if (isCurrentValueValid) {
                 series.axisValue = axisValue;
                 series.currentValue = currentValue;
+                series.comparisonValue = seriesComparisonValue;
 
-                series.comparisonValue = NumericValueUtils.isValueValid(comparisonValue)
-                    ? comparisonValue
-                    : NaN;
-
-                series.secondComparisonValue = NumericValueUtils.isValueValid(secondComparisonValue)
-                    ? secondComparisonValue
-                    : NaN;
+                series.secondComparisonValue = seriesSecondComparisonValue;
             }
 
             series.points[0] = this.updatePointSet(
@@ -608,7 +611,7 @@ export abstract class DataConverter implements IConverter<IDataRepresentation> {
                     series.settings.comparisonValue,
                     settings.sparklineSettings.isTargetVisible,
                     axisValue,
-                    series.comparisonValue,
+                    seriesComparisonValue,
                     series.settings.sparklineSettings.targetColor,
                     series.settings.sparklineSettings.targetThickness,
                     series.settings.sparklineSettings.targetLineStyle,
@@ -623,7 +626,7 @@ export abstract class DataConverter implements IConverter<IDataRepresentation> {
                     series.settings.secondComparisonValue,
                     settings.sparklineSettings.isSecondComparisonValueVisible,
                     axisValue,
-                    series.secondComparisonValue,
+                    seriesSecondComparisonValue,
                     series.settings.sparklineSettings.secondComparisonValueColor,
                     series.settings.sparklineSettings.secondComparisonValueThickness,
                     series.settings.sparklineSettings.secondComparisonValueLineStyle,
@@ -636,11 +639,11 @@ export abstract class DataConverter implements IConverter<IDataRepresentation> {
             }
 
             if (settings.sparklineSettings.isTargetVisible) {
-                DataConverter.applyYArguments(series.y, series.comparisonValue);
+                DataConverter.applyYArguments(series.y, seriesComparisonValue);
             }
 
             if (settings.sparklineSettings.isSecondComparisonValueVisible) {
-                DataConverter.applyYArguments(series.y, series.secondComparisonValue);
+                DataConverter.applyYArguments(series.y, seriesSecondComparisonValue);
             }
 
             if (isCurrentValueValid) {
