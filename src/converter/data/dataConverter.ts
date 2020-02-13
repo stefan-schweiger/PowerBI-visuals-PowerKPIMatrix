@@ -574,9 +574,18 @@ export abstract class DataConverter implements IConverter<IDataRepresentation> {
             this.applyXArguments(series, axisValue, dataRepresentation.type);
             series.axisValues.push(axisValue);
 
+            // only set Values if current value is valid, this way only the values of the current "AsOfDate" are shown
             if (isCurrentValueValid) {
                 series.axisValue = axisValue;
                 series.currentValue = currentValue;
+
+                series.comparisonValue = NumericValueUtils.isValueValid(comparisonValue)
+                    ? comparisonValue
+                    : NaN;
+
+                series.secondComparisonValue = NumericValueUtils.isValueValid(secondComparisonValue)
+                    ? secondComparisonValue
+                    : NaN;
             }
 
             series.points[0] = this.updatePointSet(
@@ -592,10 +601,6 @@ export abstract class DataConverter implements IConverter<IDataRepresentation> {
                 dataRepresentation.y,
             );
 
-            series.comparisonValue = NumericValueUtils.isValueValid(comparisonValue)
-                ? comparisonValue
-                : NaN;
-
             if (isComparisonValueSpecified) {
                 series.points[1] = this.updatePointSet(
                     series.points[1],
@@ -610,10 +615,6 @@ export abstract class DataConverter implements IConverter<IDataRepresentation> {
                     dataRepresentation.y,
                 );
             }
-
-            series.secondComparisonValue = NumericValueUtils.isValueValid(secondComparisonValue)
-                ? secondComparisonValue
-                : NaN;
 
             if (isSecondComparisonValueSpecified) {
                 series.points[2] = this.updatePointSet(
